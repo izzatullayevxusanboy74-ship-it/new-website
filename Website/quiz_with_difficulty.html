@@ -1,0 +1,313 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+#splash{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:560px;padding:3rem 2rem;text-align:center;}
+.ring{width:100px;height:100px;border-radius:50%;background:#EEEDFE;border:2.5px solid #534AB7;display:flex;align-items:center;justify-content:center;margin:0 auto 2rem;font-size:40px;animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
+.splash-title{font-size:32px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px;}
+.splash-sub{font-size:16px;color:var(--color-text-secondary);margin-bottom:2rem;line-height:1.6;max-width:360px;}
+.diff-label{font-size:13px;color:var(--color-text-secondary);margin-bottom:12px;letter-spacing:0.5px;}
+.diff-row{display:flex;gap:12px;justify-content:center;margin-bottom:2.5rem;}
+.diff-btn{padding:12px 24px;border-radius:var(--border-radius-lg);border:2px solid var(--color-border-tertiary);background:var(--color-background-secondary);cursor:pointer;font-size:15px;font-weight:500;color:var(--color-text-secondary);transition:all 0.15s;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:90px;}
+.diff-btn span.icon{font-size:22px;}
+.diff-btn span.lbl{font-size:13px;}
+.diff-btn span.pts{font-size:11px;color:var(--color-text-tertiary);}
+.diff-btn.selected-easy{background:#EAF3DE;border-color:#3B6D11;color:#27500A;}
+.diff-btn.selected-medium{background:#FAEEDA;border-color:#854F0B;color:#633806;}
+.diff-btn.selected-hard{background:#FCEBEB;border-color:#A32D2D;color:#791F1F;}
+.enter-btn{padding:14px 40px;border-radius:999px;background:#534AB7;border:none;color:white;font-size:17px;font-weight:500;cursor:pointer;transition:all 0.18s;}
+.enter-btn:hover{background:#3C3489;transform:scale(1.03);}
+.enter-btn:disabled{opacity:0.4;cursor:default;transform:none;}
+.subject-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:2rem;}
+.chip{padding:5px 14px;border-radius:999px;font-size:13px;font-weight:500;}
+
+#quiz{display:none;padding:1.5rem 1rem 1rem;}
+.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;}
+.diff-pill{padding:4px 14px;border-radius:999px;font-size:12px;font-weight:500;}
+.diff-pill.easy{background:#EAF3DE;color:#27500A;}
+.diff-pill.medium{background:#FAEEDA;color:#633806;}
+.diff-pill.hard{background:#FCEBEB;color:#791F1F;}
+.pct-ring-wrap{display:flex;align-items:center;gap:8px;}
+.pct-text{font-size:13px;font-weight:500;color:var(--color-text-primary);}
+.progress-row{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;}
+.progress-bar{flex:1;height:6px;background:var(--color-background-secondary);border-radius:999px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:999px;transition:width 0.4s ease;}
+.progress-fill.easy{background:#639922;}
+.progress-fill.medium{background:#BA7517;}
+.progress-fill.hard{background:#E24B4A;}
+.progress-text{font-size:13px;color:var(--color-text-secondary);min-width:48px;text-align:right;}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.5rem;margin-bottom:1rem;}
+.q-meta{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.q-subject{font-size:12px;font-weight:500;padding:3px 10px;border-radius:999px;}
+.q-num{font-size:13px;color:var(--color-text-tertiary);margin-left:auto;}
+.q-text{font-size:17px;font-weight:500;color:var(--color-text-primary);line-height:1.5;margin-bottom:1.25rem;}
+.options{display:grid;gap:10px;}
+.opt{padding:12px 16px;border-radius:var(--border-radius-md);border:1.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);cursor:pointer;font-size:15px;color:var(--color-text-primary);text-align:left;transition:all 0.15s;display:flex;align-items:center;gap:10px;}
+.opt:hover:not(:disabled){border-color:#534AB7;background:#EEEDFE;color:#3C3489;}
+.opt.correct{background:#EAF3DE;border-color:#3B6D11;color:#27500A;}
+.opt.wrong{background:#FCEBEB;border-color:#A32D2D;color:#791F1F;}
+.opt.dimmed{opacity:0.45;}
+.opt-letter{width:26px;height:26px;border-radius:50%;background:var(--color-background-primary);border:1px solid var(--color-border-secondary);font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.opt.correct .opt-letter{background:#639922;color:white;border-color:#639922;}
+.opt.wrong .opt-letter{background:#E24B4A;color:white;border-color:#E24B4A;}
+.feedback{padding:12px 16px;border-radius:var(--border-radius-md);margin-top:1rem;font-size:14px;line-height:1.6;border-left:3px solid transparent;}
+.feedback.correct{background:#EAF3DE;color:#27500A;border-left-color:#639922;}
+.feedback.wrong{background:#FCEBEB;color:#791F1F;border-left-color:#E24B4A;}
+.hidden{display:none;}
+.nav-row{display:flex;gap:10px;margin-top:1rem;}
+.btn-primary{flex:1;padding:12px;border-radius:var(--border-radius-md);border:1.5px solid #534AB7;background:#534AB7;color:white;font-size:15px;font-weight:500;cursor:pointer;transition:all 0.15s;}
+.btn-primary:hover{background:#3C3489;}
+.btn-secondary{padding:12px 20px;border-radius:var(--border-radius-md);border:1.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);font-size:15px;cursor:pointer;}
+.btn-secondary:hover{background:var(--color-background-secondary);}
+
+#score-view{display:none;padding:1.5rem 1rem;}
+.score-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:2.5rem 1.5rem;text-align:center;}
+.big-pct{font-size:64px;font-weight:500;line-height:1;}
+.score-grade{font-size:20px;font-weight:500;margin-top:6px;}
+.score-label{font-size:15px;color:var(--color-text-secondary);margin-top:4px;margin-bottom:1.5rem;}
+.score-breakdown{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:1.5rem 0;}
+.score-stat{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:14px;}
+.score-stat-num{font-size:22px;font-weight:500;}
+.score-stat-label{font-size:12px;color:var(--color-text-secondary);margin-top:2px;}
+.pct-bar-wrap{margin:1.5rem 0;}
+.pct-bar-bg{height:14px;background:var(--color-background-secondary);border-radius:999px;overflow:hidden;margin-top:8px;}
+.pct-bar-fill{height:100%;border-radius:999px;transition:width 1s ease;}
+</style>
+
+<div id="splash">
+  <div class="ring" aria-hidden="true">⚡</div>
+  <div class="splash-title">You're back, legend.</div>
+  <div class="splash-sub">Another week, another level up. Pick your difficulty and let's see what you've got.</div>
+  <div class="subject-chips">
+    <span class="chip" style="background:#EEEDFE;color:#3C3489;">Math</span>
+    <span class="chip" style="background:#E1F5EE;color:#085041;">English</span>
+    <span class="chip" style="background:#FAECE7;color:#712B13;">Mother Tongue</span>
+    <span class="chip" style="background:#E6F1FB;color:#0C447C;">Law</span>
+    <span class="chip" style="background:#EAF3DE;color:#27500A;">Science</span>
+  </div>
+  <div class="diff-label">Choose difficulty</div>
+  <div class="diff-row">
+    <button class="diff-btn" id="d-easy" onclick="selectDiff('easy')">
+      <span class="icon">🟢</span><span class="lbl">Easy</span><span class="pts">basics</span>
+    </button>
+    <button class="diff-btn" id="d-medium" onclick="selectDiff('medium')">
+      <span class="icon">🟡</span><span class="lbl">Medium</span><span class="pts">mixed</span>
+    </button>
+    <button class="diff-btn" id="d-hard" onclick="selectDiff('hard')">
+      <span class="icon">🔴</span><span class="lbl">Hard</span><span class="pts">advanced</span>
+    </button>
+  </div>
+  <button class="enter-btn" id="start-btn" onclick="startQuiz()" disabled>Select a level first</button>
+</div>
+
+<div id="quiz">
+  <div class="top-bar">
+    <span class="diff-pill" id="diff-pill"></span>
+    <div class="pct-ring-wrap">
+      <span style="font-size:13px;color:var(--color-text-secondary);">score</span>
+      <span class="pct-text" id="live-pct">0%</span>
+    </div>
+  </div>
+  <div class="progress-row">
+    <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:5%"></div></div>
+    <div class="progress-text" id="prog-text">1 / 20</div>
+  </div>
+  <div class="card">
+    <div class="q-meta">
+      <span class="q-subject" id="q-subject-badge"></span>
+      <span class="q-num" id="q-num-label"></span>
+    </div>
+    <div class="q-text" id="q-text"></div>
+    <div class="options" id="options"></div>
+    <div class="feedback hidden" id="feedback"></div>
+  </div>
+  <div class="nav-row">
+    <button class="btn-secondary" id="btn-prev" onclick="go(-1)"><i class="ti ti-arrow-left"></i></button>
+    <button class="btn-primary" id="btn-next" onclick="go(1)">Next →</button>
+  </div>
+</div>
+
+<div id="score-view">
+  <div class="score-card">
+    <div class="big-pct" id="final-pct"></div>
+    <div class="score-grade" id="final-grade"></div>
+    <div class="score-label" id="final-label"></div>
+    <div class="pct-bar-wrap">
+      <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--color-text-secondary);">
+        <span>0%</span><span>50%</span><span>100%</span>
+      </div>
+      <div class="pct-bar-bg"><div class="pct-bar-fill" id="pct-bar" style="width:0%"></div></div>
+    </div>
+    <div class="score-breakdown">
+      <div class="score-stat"><div class="score-stat-num" id="stat-correct" style="color:#639922"></div><div class="score-stat-label">correct</div></div>
+      <div class="score-stat"><div class="score-stat-num" id="stat-wrong" style="color:#E24B4A"></div><div class="score-stat-label">incorrect</div></div>
+      <div class="score-stat"><div class="score-stat-num" id="stat-diff"></div><div class="score-stat-label">difficulty</div></div>
+      <div class="score-stat"><div class="score-stat-num" id="stat-subj"></div><div class="score-stat-label">subjects</div></div>
+    </div>
+    <button class="btn-primary" style="width:100%;" onclick="restart()">Play again →</button>
+  </div>
+</div>
+
+<script>
+const SUBJECTS={Math:{bg:'#EEEDFE',text:'#3C3489'},English:{bg:'#E1F5EE',text:'#085041'},'Mother Tongue':{bg:'#FAECE7',text:'#712B13'},Law:{bg:'#E6F1FB',text:'#0C447C'},Science:{bg:'#EAF3DE',text:'#27500A'}};
+
+const QUESTIONS={
+  easy:[
+    {s:'Math',q:'What is 5 + 7?',opts:['10','11','12','13'],a:2,exp:'5 + 7 = 12.'},
+    {s:'Math',q:'What is 3 × 4?',opts:['10','11','12','14'],a:2,exp:'3 × 4 = 12.'},
+    {s:'Math',q:'What is half of 20?',opts:['8','9','10','11'],a:2,exp:'Half of 20 = 20 ÷ 2 = 10.'},
+    {s:'Math',q:'What shape has 3 sides?',opts:['Square','Circle','Triangle','Rectangle'],a:2,exp:'A triangle has exactly 3 sides.'},
+    {s:'English',q:'Which word is a noun?',opts:['run','happy','dog','quickly'],a:2,exp:'A noun is a person, place, or thing — "dog" is a noun.'},
+    {s:'English',q:'What is the plural of "cat"?',opts:['cates','cat','cats','caties'],a:2,exp:'You simply add -s to form the plural: cats.'},
+    {s:'English',q:'Which is a vowel?',opts:['b','c','e','g'],a:2,exp:'The vowels are a, e, i, o, u — so "e" is a vowel.'},
+    {s:'English',q:'What punctuation ends a question?',opts:['.','!','?',','],a:2,exp:'A question mark (?) ends a question.'},
+    {s:'Mother Tongue',q:'How many letters are in the English alphabet?',opts:['24','25','26','27'],a:2,exp:'The English alphabet has 26 letters.'},
+    {s:'Mother Tongue',q:'What is a synonym?',opts:['Opposite word','Same-meaning word','Rhyming word','Silent word'],a:1,exp:'A synonym is a word with the same or similar meaning as another word.'},
+    {s:'Law',q:'At what age are you legally an adult in most countries?',opts:['16','17','18','21'],a:2,exp:'In most countries the legal age of adulthood is 18.'},
+    {s:'Law',q:'What does a judge do in court?',opts:['Defends the accused','Makes the laws','Decides the outcome','Arrests people'],a:2,exp:'A judge presides over court proceedings and makes legal decisions.'},
+    {s:'Science',q:'What do plants need to make food?',opts:['Moonlight','Sunlight','Darkness','Wind'],a:1,exp:'Plants use sunlight for photosynthesis to produce food.'},
+    {s:'Science',q:'How many legs does a spider have?',opts:['6','7','8','10'],a:2,exp:'Spiders are arachnids and have 8 legs.'},
+    {s:'Science',q:'What is the boiling point of water in °C?',opts:['90','95','100','110'],a:2,exp:'Water boils at 100°C at standard atmospheric pressure.'},
+  ],
+  medium:[
+    {s:'Math',q:'What is 15% of 200?',opts:['25','30','35','20'],a:1,exp:'15% × 200 = 0.15 × 200 = 30.'},
+    {s:'Math',q:'If x² = 49, what is the positive value of x?',opts:['6','7','8','9'],a:1,exp:'7² = 49, so x = 7.'},
+    {s:'Math',q:'Solve: 3x + 5 = 20. What is x?',opts:['4','5','6','3'],a:1,exp:'3x = 15, so x = 5.'},
+    {s:'Math',q:'What is the area of a triangle with base 10 and height 6?',opts:['60','30','45','20'],a:1,exp:'Area = ½ × base × height = 30.'},
+    {s:'English',q:'Which of these is a conjunction?',opts:['quickly','beautiful','and','run'],a:2,exp:'"And" is a coordinating conjunction.'},
+    {s:'English',q:'What is the past tense of "write"?',opts:['writed','wrote','written','writing'],a:1,exp:'"Wrote" is the simple past tense of "write".'},
+    {s:'English',q:'What does the prefix "un-" mean?',opts:['again','before','not','after'],a:2,exp:'"Un-" means "not" — e.g., unhappy.'},
+    {s:'Mother Tongue',q:'What is onomatopoeia?',opts:['Metaphor','Simile','Word that sounds like what it describes','Alliteration'],a:2,exp:'Onomatopoeia — words like "buzz" mimic the sounds they represent.'},
+    {s:'Mother Tongue',q:'Which is an example of alliteration?',opts:['The moon shines bright','Peter picked peppers','Run as fast as wind','Big red apple'],a:1,exp:'"Peter picked peppers" repeats the "p" sound.'},
+    {s:'Mother Tongue',q:'What does "bilingual" mean?',opts:['Can read fast','Speaks two languages','Loves books','Writes poetry'],a:1,exp:'"Bi-" = two, so bilingual = speaks two languages.'},
+    {s:'Law',q:'What does "presumption of innocence" mean?',opts:['Everyone is guilty','Guilty until proven innocent','Innocent until proven guilty','Judges decide guilt'],a:2,exp:'You are innocent until the court proves guilt.'},
+    {s:'Law',q:'What is a "contract"?',opts:['A government document','A binding agreement','A type of crime','A court order'],a:1,exp:'A contract is a legally binding agreement between parties.'},
+    {s:'Science',q:'What gas do plants absorb in photosynthesis?',opts:['Oxygen','Nitrogen','Carbon dioxide','Hydrogen'],a:2,exp:'Plants absorb CO₂ during photosynthesis.'},
+    {s:'Science',q:'What is the chemical formula for water?',opts:['HO','H₂O','H₂O₂','OH'],a:1,exp:'Water is H₂O — 2 hydrogen atoms + 1 oxygen.'},
+    {s:'Math',q:'What is π rounded to 2 decimal places?',opts:['3.14','3.41','2.14','3.16'],a:0,exp:'Pi ≈ 3.14159… → 3.14.'},
+  ],
+  hard:[
+    {s:'Math',q:'What is the derivative of x³?',opts:['x²','2x','3x²','3x'],a:2,exp:'Using the power rule: d/dx(xⁿ) = nxⁿ⁻¹, so d/dx(x³) = 3x².'},
+    {s:'Math',q:'What is log₂(64)?',opts:['4','5','6','8'],a:2,exp:'2⁶ = 64, so log₂(64) = 6.'},
+    {s:'Math',q:'If a circle has radius 7, what is its area? (use π≈3.14)',opts:['43.96','153.86','44','21.98'],a:1,exp:'Area = π × r² = 3.14 × 49 ≈ 153.86.'},
+    {s:'Math',q:'Solve for x: 2x² − 8 = 0',opts:['x = ±2','x = ±4','x = 2','x = 4'],a:0,exp:'2x² = 8 → x² = 4 → x = ±2.'},
+    {s:'English',q:'What is the subjunctive mood used for?',opts:['Stating facts','Commands only','Hypothetical or wishful situations','Describing the past'],a:2,exp:'The subjunctive expresses wishes, doubts, or hypothetical conditions — e.g. "If I were you…"'},
+    {s:'English',q:'Identify the literary device: "The wind whispered secrets."',opts:['Simile','Hyperbole','Personification','Oxymoron'],a:2,exp:'Giving wind a human quality (whispering) is personification.'},
+    {s:'English',q:'Which sentence is grammatically correct?',opts:['Whom shall I say is calling?','Who shall I say is calling?','Whose calling?','Whom is calling?'],a:1,exp:'"Who" is correct here as it is the subject of "is calling".'},
+    {s:'Mother Tongue',q:'What is a "morpheme"?',opts:['A type of poem','The smallest unit of meaning','A punctuation rule','A vowel sound'],a:1,exp:'A morpheme is the smallest unit of meaning in a language (e.g. "un-", "walk", "-ed").'},
+    {s:'Mother Tongue',q:'What rhetorical device repeats a structure at the start of clauses?',opts:['Chiasmus','Anaphora','Synecdoche','Metonymy'],a:1,exp:'Anaphora is the repetition of a phrase at the beginning of successive clauses — e.g. "We shall fight… We shall never surrender."'},
+    {s:'Law',q:'What is "habeas corpus"?',opts:['Right to remain silent','Right to a jury','Right to challenge unlawful detention','Right to legal counsel'],a:2,exp:'Habeas corpus requires a person under arrest to be brought before a judge — protecting against unlawful detention.'},
+    {s:'Law',q:'What does "tort" mean in law?',opts:['A criminal act','A civil wrong causing harm','A broken contract','A court appeal'],a:1,exp:'A tort is a civil wrong — an act that causes harm and can lead to legal liability (e.g. negligence).'},
+    {s:'Law',q:'What is the principle of "stare decisis"?',opts:['Judges can ignore past rulings','Courts must follow precedent','Laws override all decisions','Defendants choose their judge'],a:1,exp:'"Stare decisis" means courts follow established precedent to ensure legal consistency.'},
+    {s:'Science',q:'What is the powerhouse of the cell?',opts:['Nucleus','Ribosome','Mitochondria','Golgi apparatus'],a:2,exp:'The mitochondria produce ATP through cellular respiration — the cell\'s energy currency.'},
+    {s:'Science',q:'What is Newton\'s second law of motion?',opts:['Every action has an equal reaction','Objects in motion stay in motion','Force = mass × acceleration','Energy cannot be created'],a:2,exp:'F = ma — force equals mass multiplied by acceleration.'},
+    {s:'Science',q:'What particle has a negative charge?',opts:['Proton','Neutron','Electron','Photon'],a:2,exp:'Electrons carry a negative charge and orbit the nucleus of an atom.'},
+  ]
+};
+
+let diff='',current=0,answers=[],activeQ=[];
+
+function selectDiff(d){
+  diff=d;
+  ['easy','medium','hard'].forEach(x=>{
+    const b=document.getElementById('d-'+x);
+    b.className='diff-btn'+(x===d?' selected-'+x:'');
+  });
+  const btn=document.getElementById('start-btn');
+  btn.disabled=false;
+  btn.textContent="Let's go →";
+}
+
+function startQuiz(){
+  activeQ=QUESTIONS[diff];
+  answers=new Array(activeQ.length).fill(null);
+  current=0;
+  document.getElementById('splash').style.display='none';
+  document.getElementById('quiz').style.display='block';
+  const pill=document.getElementById('diff-pill');
+  pill.className='diff-pill '+diff;
+  pill.textContent=diff.charAt(0).toUpperCase()+diff.slice(1);
+  document.getElementById('prog-fill').className='progress-fill '+diff;
+  render();
+}
+
+function render(){
+  const q=activeQ[current];
+  const total=activeQ.length;
+  const answered=answers[current];
+  document.getElementById('prog-fill').style.width=Math.round(((current+1)/total)*100)+'%';
+  document.getElementById('prog-text').textContent=`${current+1} / ${total}`;
+  updateLivePct();
+  const sub=SUBJECTS[q.s]||{bg:'#eee',text:'#333'};
+  const badge=document.getElementById('q-subject-badge');
+  badge.textContent=q.s;badge.style.background=sub.bg;badge.style.color=sub.text;
+  document.getElementById('q-num-label').textContent='Q'+(current+1);
+  document.getElementById('q-text').textContent=q.q;
+  const letters=['A','B','C','D'];
+  document.getElementById('options').innerHTML=q.opts.map((o,i)=>{
+    let cls='opt';
+    if(answered!==null){if(i===q.a)cls+=' correct';else if(i===answered)cls+=' wrong';else cls+=' dimmed';}
+    return`<button class="${cls}" onclick="answer(${i})" ${answered!==null?'disabled':''}><span class="opt-letter">${letters[i]}</span>${o}</button>`;
+  }).join('');
+  const fb=document.getElementById('feedback');
+  if(answered!==null){fb.className='feedback '+(answered===q.a?'correct':'wrong');fb.textContent=(answered===q.a?'✓ Correct! ':'✗ Not quite. ')+q.exp;fb.classList.remove('hidden');}
+  else{fb.classList.add('hidden');}
+  document.getElementById('btn-prev').disabled=current===0;
+  const nextBtn=document.getElementById('btn-next');
+  const allDone=answers.every(a=>a!==null);
+  if(current===total-1&&allDone){nextBtn.textContent='See results →';nextBtn.onclick=showScore;}
+  else{nextBtn.textContent=answered!==null?'Next →':'Skip →';nextBtn.onclick=()=>go(1);}
+}
+
+function updateLivePct(){
+  const answered=answers.filter(a=>a!==null).length;
+  if(answered===0){document.getElementById('live-pct').textContent='0%';return;}
+  const correct=answers.reduce((acc,a,i)=>acc+(a===activeQ[i].a?1:0),0);
+  document.getElementById('live-pct').textContent=Math.round((correct/answered)*100)+'%';
+}
+
+function answer(i){
+  if(answers[current]!==null)return;
+  answers[current]=i;
+  render();
+  const allDone=answers.every(a=>a!==null);
+  if(current===activeQ.length-1&&allDone){document.getElementById('btn-next').textContent='See results →';document.getElementById('btn-next').onclick=showScore;}
+}
+
+function go(dir){current=Math.max(0,Math.min(activeQ.length-1,current+dir));render();}
+
+function showScore(){
+  const total=activeQ.length;
+  const correct=answers.reduce((acc,a,i)=>acc+(a===activeQ[i].a?1:0),0);
+  const pct=Math.round((correct/total)*100);
+  document.getElementById('quiz').style.display='none';
+  const sv=document.getElementById('score-view');sv.style.display='block';
+  document.getElementById('final-pct').textContent=pct+'%';
+  const diffColor=diff==='easy'?'#639922':diff==='medium'?'#BA7517':'#E24B4A';
+  document.getElementById('final-pct').style.color=diffColor;
+  document.getElementById('pct-bar').style.background=diffColor;
+  let grade,label;
+  if(pct>=90){grade='Outstanding';label='You crushed it. Absolute legend.';}
+  else if(pct>=75){grade='Great job';label='Solid performance. Keep it up.';}
+  else if(pct>=60){grade='Good effort';label='You\'re getting there. Keep grinding.';}
+  else if(pct>=40){grade='Keep going';label='More practice and you\'ll nail it.';}
+  else{grade='Room to grow';label='Review your notes and try again!';}
+  document.getElementById('final-grade').textContent=grade;
+  document.getElementById('final-grade').style.color=diffColor;
+  document.getElementById('final-label').textContent=label;
+  document.getElementById('stat-correct').textContent=correct;
+  document.getElementById('stat-wrong').textContent=total-correct;
+  document.getElementById('stat-diff').textContent=diff.charAt(0).toUpperCase()+diff.slice(1);
+  document.getElementById('stat-subj').textContent=[...new Set(activeQ.map(q=>q.s))].length;
+  setTimeout(()=>{document.getElementById('pct-bar').style.width=pct+'%';},100);
+}
+
+function restart(){
+  diff='';current=0;answers=[];activeQ=[];
+  document.getElementById('score-view').style.display='none';
+  document.getElementById('splash').style.display='flex';
+  ['easy','medium','hard'].forEach(x=>{document.getElementById('d-'+x).className='diff-btn';});
+  document.getElementById('start-btn').disabled=true;
+  document.getElementById('start-btn').textContent='Select a level first';
+}
+</script>
